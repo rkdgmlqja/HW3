@@ -2,6 +2,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
+import matplotlib.pyplot as plt
 
 from dataset import Shakespeare
 from model import CharRNN, CharLSTM
@@ -20,7 +21,6 @@ def train(model, trn_loader, device, criterion, optimizer):
         trn_loss: average loss value
     """
 
-    # write your codes here
     model.train()
     trn_loss = 0
 
@@ -55,7 +55,6 @@ def validate(model, val_loader, device, criterion):
         val_loss: average loss value
     """
 
-    # write your codes here
     model.eval()
     val_loss = 0
 
@@ -87,7 +86,6 @@ def main():
 
     """
 
-    # write your codes here
     input_file = 'shakespeare_train.txt'
     batch_size = 1024
     epochs = 100
@@ -120,9 +118,16 @@ def main():
     best_val_loss_rnn = float('inf')
     best_val_loss_lstm = float('inf')
 
+    rnn_train_losses = []
+    lstm_train_losses = []
+    rnn_val_losses = []
+    lstm_val_losses = []
+
     for epoch in range(epochs):
         train_loss_rnn = train(char_rnn, train_loader, device, criterion, optimizer_rnn)
         val_loss_rnn = validate(char_rnn, val_loader, device, criterion)
+        rnn_train_losses.append(train_loss_rnn)
+        rnn_val_losses.append(val_loss_rnn)
 
         if val_loss_rnn < best_val_loss_rnn:
             best_val_loss_rnn = val_loss_rnn
@@ -131,6 +136,8 @@ def main():
 
         train_loss_lstm = train(char_lstm, train_loader, device, criterion, optimizer_lstm)
         val_loss_lstm = validate(char_lstm, val_loader, device, criterion)
+        lstm_train_losses.append(train_loss_lstm)
+        lstm_val_losses.append(val_loss_lstm)
 
         if val_loss_lstm < best_val_loss_lstm:
             best_val_loss_lstm = val_loss_lstm
@@ -139,6 +146,18 @@ def main():
 
         print(f'Epoch {epoch+1}/{epochs} - RNN Train Loss: {train_loss_rnn:.4f} Val Loss: {val_loss_rnn:.4f}')
         print(f'Epoch {epoch+1}/{epochs} - LSTM Train Loss: {train_loss_lstm:.4f} Val Loss: {val_loss_lstm:.4f}')
+
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, epochs+1), rnn_train_losses, label='RNN Train Loss')
+    plt.plot(range(1, epochs+1), rnn_val_losses, label='RNN Validation Loss')
+    plt.plot(range(1, epochs+1), lstm_train_losses, label='LSTM Train Loss')
+    plt.plot(range(1, epochs+1), lstm_val_losses, label='LSTM Validation Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss Over Epochs')
+    plt.legend()
+    plt.savefig('train_val_losses.png')
 
 if __name__ == '__main__':
     main()
