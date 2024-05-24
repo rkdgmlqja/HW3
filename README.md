@@ -23,60 +23,80 @@ Validation Loss의 경우 RNN은 23 Epoch에서 최소값을 가지며 이후에
 ### temperature: 0.1 Results
 **seed1**
 
+MENENIUS:
+I will not say the such a soul of the people, come, my lord, and with the commons and ca
+
 **seed2**
+
+CORIOLANUS:
+The comes the country's country to the country that have been you have been you to the
 
 **seed3**
 
+SICINIUS:
+The country that have not the people with the people, when the country the common the pe
+
 **seed4**
 
+CORIOLANUS:
+I will not should be the people, who come to the people to the state the common world 
+
 **seed5**
+
+CORIOLANUS:
+The commons and content of the people, come to the commons, and with the consul, that 
 
 ### temperature: 0.3 Results
 **seed1**
 
+Second Citizen:
+Nay, but speak not maliciously.
+
 **seed2**
+
+CORIOLANUS:
+What me well, we have not the people comes the consul, we comes the state the city of 
 
 **seed3**
 
+MARCIUS:
+The comes to come to the may they do you could shall be the gods of this pass'd, and the
+
 **seed4**
 
+CORIOLANUS:
+I will not work with his country's country's death, and made the state a country's bea
+
 **seed5**
+
+CORIOLANUS:
+I will see the king, and made the such a charge his country's part of the truth the go
 
 ### temperature: 0.5 Results
 **seed1**
 
-
 Second Citizen:
 You shall be consul, the wars to make them to me, and the man I will make my son a
 
-
 **seed2**
-
 
 BUCKINGHAM:
 What, no, not so it forth the people, and for this proud to be a shame, and you shall 
 
-
 **seed3**
-
 
 GLOUCESTER:
 Why, the man shall not for that that I shall tell his house, that with this dearer and
 
-
 **seed4**
-
 
 When set down this a man stand against the wounds and and you shall not shall be consul. I would be
 
-
 **seed5**
-
 
 CLARENCE:
 O, now this lords, and we do but have men and his worthy wife a good state,
 And cry and 
-
 
 ### temperature: 0.8 Results
 **seed1**
