@@ -166,7 +166,7 @@ But if we show't, who have war as treeth cames? The compation's line.
 YORK:
 Have 
 
-###분석
+### 분석
 temperature T가 낮을때는 주로 한 인물의 대사를 생성하며 ":"기호를 적절히 사용하고 그나마 문법적으로 맞는 문장을 생성하는 모습을 보인다.
 
 그러나 T가 증가함에 따라 여러줄의 Text를 생성하면서 여러 인물또한 추가된다. 하지만 존제하지 않는 단어를 생성하거나 문장 구조가 굉장이 이상해지는 모습을 보인다.
