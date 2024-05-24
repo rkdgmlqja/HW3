@@ -1,36 +1,3 @@
-# import some packages you need here
-import torch
-from model import CharRNN, CharLSTM
-from dataset import Shakespeare
-
-# def generate(model, seed_characters, temperature, *args):
-#     """ Generate characters
-#
-#     Args:
-#         model: trained model
-#         seed_characters: seed characters
-# 				temperature: T
-# 				args: other arguments if needed
-#
-#     Returns:
-#         samples: generated characters
-#     """
-#     model.eval()
-#     input_seq = torch.tensor([char_to_idx[ch] for ch in seed_characters], dtype=torch.long).unsqueeze(0).to(device)
-#     hidden = model.init_hidden(1)
-#
-#     generated = seed_characters
-#     # write your codes here
-#     for _ in range(seq_len):
-#         output, hidden = model(input_seq, hidden)
-#         output = output / temperature
-#         probs = torch.nn.functional.softmax(output[-1], dim=0).cpu().numpy()
-#         char_idx = torch.multinomial(torch.tensor(probs), 1).item()
-#         generated += idx_to_char[char_idx]
-#         input_seq = torch.tensor([[char_idx]], dtype=torch.long).to(device)
-#
-#     return samples
-
 import torch
 from model import CharRNN, CharLSTM
 from dataset import Shakespeare
@@ -41,8 +8,8 @@ def generate(model, seed_characters, temperature, device, char_to_idx, idx_to_ch
     Args:
         model: trained model
         seed_characters: seed characters
-				temperature: T
-				args: other arguments if needed
+        temperature: T
+        seq_len: length of the sequence to generate
 
     Returns:
         samples: generated characters
@@ -66,261 +33,152 @@ def generate(model, seed_characters, temperature, device, char_to_idx, idx_to_ch
 
     return generated
 
+def save_generated_text(filename, texts):
+    with open(filename, 'w') as f:
+        for text in texts:
+            f.write(text + '\n\n')
+
 if __name__ == '__main__':
     input_file = 'shakespeare_train.txt'
-    model_type = 'rnn'  # Choose 'rnn' or 'lstm'
+    seeds = [
+        """First Citizen:
+Before we proceed any further, hear me speak.
 
-    seed1 = """MENENIUS:
-    Good my friends,
-    If you have heard your general talk of Rome,
-    And of his friends there, it is lots to blanks,
-    My name hath touch'd your ears it is Menenius.
-    
-    First Senator:
-    Be it so; go back: the virtue of your name
-    Is not here passable.
-    
-    MENENIUS:
-    I tell thee, fellow,
-    The general is my lover: I have been
-    The book of his good acts, whence men have read
-    His name unparallel'd, haply amplified;
-    For I have ever verified my friends,
-    Of whom he's chief, with all the size that verity
-    Would without lapsing suffer: nay, sometimes,
-    Like to a bowl upon a subtle ground,
-    I have tumbled past the throw; and in his praise
-    Have almost stamp'd the leasing: therefore, fellow,
-    I must have leave to pass.
-    
-    First Senator:
-    Faith, sir, if you had told as many lies in his
-    behalf as you have uttered words in your own, you
-    should not pass here; no, though it were as virtuous
-    to lie as to live chastely. Therefore, go back.
-    
-    MENENIUS:
-    Prithee, fellow, remember my name is Menenius,
-    always factionary on the party of your general."""
+All:
+Speak, speak.
 
-    seed2 = """GLOUCESTER:
-    Go you before, and I will follow you.
-    He cannot live, I hope; and must not die
-    Till George be pack'd with post-horse up to heaven.
-    I'll in, to urge his hatred more to Clarence,
-    With lies well steel'd with weighty arguments;
-    And, if I fall not in my deep intent,
-    Clarence hath not another day to live:
-    Which done, God take King Edward to his mercy,
-    And leave the world for me to bustle in!
-    For then I'll marry Warwick's youngest daughter.
-    What though I kill'd her husband and her father?
-    The readiest way to make the wench amends
-    Is to become her husband and her father:
-    The which will I; not all so much for love
-    As for another secret close intent,
-    By marrying her which I must reach unto.
-    But yet I run before my horse to market:
-    Clarence still breathes; Edward still lives and reigns:
-    When they are gone, then must I count my gains.
+First Citizen:
+You are all resolved rather to die than to famish?
 
-    LADY ANNE:
-    Set down, set down your honourable load,
-    If honour may be shrouded in a hearse,
-    Whilst I awhile obsequiously lament
-    The untimely fall of virtuous Lancaster.
-    Poor key-cold figure of a holy king!
-    Pale ashes of the house of Lancaster!
-    Thou bloodless remnant of that royal blood!
-    Be it lawful that I invocate thy ghost,
-    To hear the lamentations of Poor Anne,
-    Wife to thy Edward, to thy slaughter'd son,
-    Stabb'd by the selfsame hand that made these wounds!
-    Lo, in these windows that let forth thy life,
-    I pour the helpless balm of my poor eyes.
-    Cursed be the hand that made these fatal holes!
-    Cursed be the heart that had the heart to do it!
-    Cursed the blood that let this blood from hence!
-    More direful hap betide that hated wretch,
-    That makes us wretched by the death of thee,
-    Than I can wish to adders, spiders, toads,
-    Or any creeping venom'd thing that lives!
-    If ever he have child, abortive be it,
-    Prodigious, and untimely brought to light,
-    Whose ugly and unnatural aspect
-    May fright the hopeful mother at the view;
-    And that be heir to his unhappiness!
-    If ever he have wife, let her he made
-    A miserable by the death of him
-    As I am made by my poor lord and thee!
-    Come, now towards Chertsey with your holy load,
-    Taken from Paul's to be interred there;
-    And still, as you are weary of the weight,
-    Rest you, whiles I lament King Henry's corse."""
+All:
+Resolved. resolved.
 
-    seed3 = """SICINIUS:
-    He's sentenced; no more hearing.
-    
-    COMINIUS:
-    Let me speak:
-    I have been consul, and can show for Rome
-    Her enemies' marks upon me. I do love
-    My country's good with a respect more tender,
-    More holy and profound, than mine own life,
-    My dear wife's estimate, her womb's increase,
-    And treasure of my loins; then if I would
-    Speak that,--
-    
-    SICINIUS:
-    We know your drift: speak what?
-    
-    BRUTUS:
-    There's no more to be said, but he is banish'd,
-    As enemy to the people and his country:
-    It shall be so.
-    
-    Citizens:
-    It shall be so, it shall be so.
-    
-    CORIOLANUS:
-    You common cry of curs! whose breath I hate
-    As reek o' the rotten fens, whose loves I prize
-    As the dead carcasses of unburied men
-    That do corrupt my air, I banish you;
-    And here remain with your uncertainty!
-    Let every feeble rumour shake your hearts!
-    Your enemies, with nodding of their plumes,
-    Fan you into despair! Have the power still
-    To banish your defenders; till at length
-    Your ignorance, which finds not till it feels,
-    Making not reservation of yourselves,
-    Still your own foes, deliver you as most
-    Abated captives to some nation
-    That won you without blows! Despising,
-    For you, the city, thus I turn my back:
-    There is a world elsewhere.
-    
-    AEdile:
-    The people's enemy is gone, is gone!"""
+First Citizen:
+First, you know Caius Marcius is chief enemy to the people.
 
-    seed4="""CORIOLANUS:
-    What is the matter
-    That being pass'd for consul with full voice,
-    I am so dishonour'd that the very hour
-    You take it off again?
-    
-    SICINIUS:
-    Answer to us.
-    
-    CORIOLANUS:
-    Say, then: 'tis true, I ought so.
-    
-    SICINIUS:
-    We charge you, that you have contrived to take
-    From Rome all season'd office and to wind
-    Yourself into a power tyrannical;
-    For which you are a traitor to the people.
-    
-    CORIOLANUS:
-    How! traitor!
-    
-    MENENIUS:
-    Nay, temperately; your promise.
-    
-    CORIOLANUS:
-    The fires i' the lowest hell fold-in the people!
-    Call me their traitor! Thou injurious tribune!
-    Within thine eyes sat twenty thousand deaths,
-    In thy hand clutch'd as many millions, in
-    Thy lying tongue both numbers, I would say
-    'Thou liest' unto thee with a voice as free
-    As I do pray the gods.
-    
-    SICINIUS:
-    Mark you this, people?
-    
-    Citizens:
-    To the rock, to the rock with him!
-    
-    SICINIUS:
-    Peace!
-    We need not put new matter to his charge:
-    What you have seen him do and heard him speak,
-    Beating your officers, cursing yourselves,
-    Opposing laws with strokes and here defying
-    Those whose great power must try him; even this,
-    So criminal and in such capital kind,
-    Deserves the extremest death."""
+All:
+We know't, we know't.
 
-    seed5 = """AEdile:
-    With old Menenius, and those senators
-    That always favour'd him.
-    
-    SICINIUS:
-    Have you a catalogue
-    Of all the voices that we have procured
-    Set down by the poll?
-    
-    AEdile:
-    I have; 'tis ready.
-    
-    SICINIUS:
-    Have you collected them by tribes?
-    
-    AEdile:
-    I have.
-    
-    SICINIUS:
-    Assemble presently the people hither;
-    And when they bear me say 'It shall be so
-    I' the right and strength o' the commons,' be it either
-    For death, for fine, or banishment, then let them
-    If I say fine, cry 'Fine;' if death, cry 'Death.'
-    Insisting on the old prerogative
-    And power i' the truth o' the cause.
-    
-    AEdile:
-    I shall inform them.
-    
-    BRUTUS:
-    And when such time they have begun to cry,
-    Let them not cease, but with a din confused
-    Enforce the present execution
-    Of what we chance to sentence.
-    
-    AEdile:
-    Very well.
-    
-    SICINIUS:
-    Make them be strong and ready for this hint,
-    When we shall hap to give 't them.
-    
-    BRUTUS:
-    Go about it.
-    Put him to choler straight: he hath been used
-    Ever to conquer, and to have his worth
-    Of contradiction: being once chafed, he cannot
-    Be rein'd again to temperance; then he speaks
-    What's in his heart; and that is there which looks
-    With us to break his neck.
-    
-    SICINIUS:
-    Well, here he comes.
-    
-    MENENIUS:
-    Calmly, I do beseech you.
-    """
+First Citizen:
+Let us kill him, and we'll have corn at our own price.
+Is't a verdict?
+
+All:
+No more talking on't; let it be done: away, away!
+
+Second Citizen:
+One word, good citizens.""",
+"""Second Citizen:
+Nay, but speak not maliciously.
+
+First Citizen:
+I say unto you, what he hath done famously, he did
+it to that end: though soft-conscienced men can be
+content to say it was for his country he did it to
+please his mother and to be partly proud; which he
+is, even till the altitude of his virtue.
+
+Second Citizen:
+What he cannot help in his nature, you account a
+vice in him. You must in no way say he is covetous.
+
+First Citizen:
+If I must not, I need not be barren of accusations;
+he hath faults, with surplus, to tire in repetition.
+What shouts are these? The other side o' the city
+is risen: why stay we prating here? to the Capitol!""",
+"""Second Citizen:
+Worthy Menenius Agrippa; one that hath always loved
+the people.
+
+First Citizen:
+He's one honest enough: would all the rest were so!
+
+MENENIUS:
+What work's, my countrymen, in hand? where go you
+With bats and clubs? The matter? speak, I pray you.
+
+First Citizen:
+Our business is not unknown to the senate; they have
+had inkling this fortnight what we intend to do,
+which now we'll show 'em in deeds. They say poor
+suitors have strong breaths: they shall know we
+have strong arms too.
+
+MENENIUS:
+Why, masters, my good friends, mine honest neighbours,
+Will you undo yourselves?""",
+"""First Citizen:
+Care for us! True, indeed! They ne'er cared for us
+yet: suffer us to famish, and their store-houses
+crammed with grain; make edicts for usury, to
+support usurers; repeal daily any wholesome act
+established against the rich, and provide more
+piercing statutes daily, to chain up and restrain
+the poor. If the wars eat us not up, they will; and
+there's all the love they bear us.
+
+MENENIUS:
+Either you must
+Confess yourselves wondrous malicious,
+Or be accused of folly. I shall tell you
+A pretty tale: it may be you have heard it;
+But, since it serves my purpose, I will venture
+To stale 't a little more.""",
+"""MENENIUS:
+There was a time when all the body's members
+Rebell'd against the belly, thus accused it:
+That only like a gulf it did remain
+I' the midst o' the body, idle and unactive,
+Still cupboarding the viand, never bearing
+Like labour with the rest, where the other instruments
+Did see and hear, devise, instruct, walk, feel,
+And, mutually participate, did minister
+Unto the appetite and affection common
+Of the whole body. The belly answer'd--
+
+First Citizen:
+Well, sir, what answer made the belly?
+
+MENENIUS:
+Sir, I shall tell you. With a kind of smile,
+Which ne'er came from the lungs, but even thus--
+For, look you, I may make the belly smile
+As well as speak--it tauntingly replied
+To the discontented members, the mutinous parts
+That envied his receipt; even so most fitly
+As you malign our senators for that
+They are not such as you."""
+    ]
     temperature = 0.5
+    seq_len = 100  # Define the length of generated sequence
 
     dataset = Shakespeare(input_file)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    if model_type == 'rnn':
-        model = CharRNN(input_size=len(dataset.chars), hidden_size=512, output_size=len(dataset.chars), n_layers=3).to(device)
-        model.load_state_dict(torch.load('char_rnn.pth', map_location=device))
-    else:
-        model = CharLSTM(input_size=len(dataset.chars), hidden_size=512, output_size=len(dataset.chars), n_layers=3).to(device)
-        model.load_state_dict(torch.load('char_lstm.pth', map_location=device))
+    # Load RNN model
+    rnn_model = CharRNN(input_size=len(dataset.chars), hidden_size=512, output_size=len(dataset.chars), n_layers=3).to(device)
+    rnn_model.load_state_dict(torch.load('char_rnn.pth', map_location=device))
 
-    generated_text = generate(model, seed, temperature, device, dataset.char_to_idx, dataset.idx_to_char)
-    print(generated_text)
+    # Load LSTM model
+    lstm_model = CharLSTM(input_size=len(dataset.chars), hidden_size=512, output_size=len(dataset.chars), n_layers=3).to(device)
+    lstm_model.load_state_dict(torch.load('char_lstm.pth', map_location=device))
+
+    rnn_generated_texts = []
+    lstm_generated_texts = []
+
+    # Generate text using RNN model
+    for seed in seeds:
+        rnn_generated_text = generate(rnn_model, seed, temperature, device, dataset.char_to_idx, dataset.idx_to_char, seq_len)
+        rnn_generated_texts.append(rnn_generated_text)
+        print(f"RNN Generated Text:\n{rnn_generated_text}\n")
+
+    # Generate text using LSTM model
+    for seed in seeds:
+        lstm_generated_text = generate(lstm_model, seed, temperature, device, dataset.char_to_idx, dataset.idx_to_char, seq_len)
+        lstm_generated_texts.append(lstm_generated_text)
+        print(f"LSTM Generated Text:\n{lstm_generated_text}\n")
+
+    # Save generated texts to files
+    save_generated_text('rnn_generated_texts.txt', rnn_generated_texts)
+    save_generated_text('lstm_generated_texts.txt', lstm_generated_texts)
