@@ -101,20 +101,67 @@ And cry and
 ### temperature: 0.8 Results
 **seed1**
 
+The combastomed in pride of our power, you would may charge out, and be brain.
+
+First Citizen:
+Fare
+
 **seed2**
+
+Secandance:
+Give it was belove to to unto the noble to that you way ever be was as you intern'd to
 
 **seed3**
 
+LADY ANNE:
+Nabk, when his grace shall be speak; all that high place in holy ready made the part mi
+
 **seed4**
 
+I'll may go't, he shall we shall be at you well under a couting that we wish we in the custens him.
+
 **seed5**
+
+CORIOLANUS:
+O was a bloody you have the other need's unless. He me he will.
+
+First Citizen:
+Doth a
 ### temperature: 1.0 Results
 **seed1**
 
+SICINIUS:
+The corriam's, my lord?
+
+CORIOLANUS:
+So the belly sweet way we is name, 
+
 **seed2**
+
+AEdile:
+The his more.
+
+SICINIUS:
+Where's is true, look'd old may be at they latible qued him that 
 
 **seed3**
 
+YORET:
+Grandam tends upon afface, and set thee.
+
+CORIOLANUS:
+Whreak'st, you canst from him; you, w
+
 **seed4**
 
+COMINIUS:
+O, that you tribune doup's own cruel been by you? my body; and your lay you in catacles 
+
+
 **seed5**
+
+Second Senator:
+But if we show't, who have war as treeth cames? The compation's line.
+
+YORK:
+Have 
