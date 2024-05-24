@@ -17,9 +17,9 @@ def generate(model, seed_characters, temperature, device, char_to_idx, idx_to_ch
     model.eval()
     input_seq = torch.tensor([char_to_idx[ch] for ch in seed_characters], dtype=torch.long).unsqueeze(0).to(device)
     hidden = model.init_hidden(1)
-    if isinstance(hidden, tuple):  # For LSTM
+    if isinstance(hidden, tuple):  
         hidden = (hidden[0].to(device), hidden[1].to(device))
-    else:  # For RNN
+    else:  
         hidden = hidden.to(device)
 
     generated = seed_characters
@@ -151,29 +151,29 @@ As you malign our senators for that
 They are not such as you."""
     ]
     temperature = 0.5
-    seq_len = 100  # Define the length of generated sequence
+    seq_len = 100  
 
     dataset = Shakespeare(input_file)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Load RNN model
+
     rnn_model = CharRNN(input_size=len(dataset.chars), hidden_size=512, output_size=len(dataset.chars), n_layers=3).to(device)
     rnn_model.load_state_dict(torch.load('char_rnn.pth', map_location=device))
 
-    # Load LSTM model
+
     lstm_model = CharLSTM(input_size=len(dataset.chars), hidden_size=512, output_size=len(dataset.chars), n_layers=3).to(device)
     lstm_model.load_state_dict(torch.load('char_lstm.pth', map_location=device))
 
     rnn_generated_texts = []
     lstm_generated_texts = []
 
-    # Generate text using RNN model
+
     for seed in seeds:
         rnn_generated_text = generate(rnn_model, seed, temperature, device, dataset.char_to_idx, dataset.idx_to_char, seq_len)
         rnn_generated_texts.append(rnn_generated_text)
         print(f"RNN Generated Text:\n{rnn_generated_text}\n")
 
-    # Generate text using LSTM model
+
     for seed in seeds:
         lstm_generated_text = generate(lstm_model, seed, temperature, device, dataset.char_to_idx, dataset.idx_to_char, seq_len)
         lstm_generated_texts.append(lstm_generated_text)
